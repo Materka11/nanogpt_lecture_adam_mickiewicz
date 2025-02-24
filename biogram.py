@@ -29,8 +29,8 @@ decode = lambda l: "".join(itos[i] for i in l)
 
 data = torch.tensor(encode(text), dtype=torch.long)
 n = int(0.9*len(data))
-train_data = data[:n]
-val_data = data[n:]
+train_data = data[:n].to(device) 
+val_data = data[n:].to(device)   
 
 def get_batch(split):
   data = train_data if split == 'train' else val_data
@@ -165,9 +165,16 @@ class BiogramLangugageModel(nn.Module):
       idx_next = torch.multinomial(probs, num_samples=1)
       idx = torch.cat((idx, idx_next), dim=1)
     return idx
+
+
   
 model = BiogramLangugageModel()
 m = model.to(device)
+
+print(f"Model is on: {next(model.parameters()).device}")
+print(f"Train data is on: {train_data.device}")
+print(f"Validation data is on: {val_data.device}") 
+print(torch.version.cuda)
 
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 
