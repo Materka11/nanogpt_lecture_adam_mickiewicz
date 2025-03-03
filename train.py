@@ -192,4 +192,9 @@ for iter in range(max_iters):
   optimizer.step()
 
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
-print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+generated_text = print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+
+with open("output.txt", 'w', encoding='utf-8') as f:
+    f.write(generated_text)
+
+print("Generated text has been written to output.txt")
